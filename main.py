@@ -2,7 +2,7 @@ import numpy as np
 from psychopy import visual, core, gui, event
 from datetime import datetime
 import keyboard
-from Oracle import Oracle
+from Oracle import Oracle_switcher
 import os
 
 # ---------------------------------------------------------------------------- #
@@ -39,7 +39,7 @@ if not os.path.exists("data"):
 # ---------------------------------------------------------------------------- #
 #                               create an oracle                               #
 # ---------------------------------------------------------------------------- #
-oracle = Oracle(info["# Repetitions"])
+oracle = Oracle_switcher(wSize=1)
 
 
 # ---------------------------------------------------------------------------- #
@@ -47,9 +47,9 @@ oracle = Oracle(info["# Repetitions"])
 # ---------------------------------------------------------------------------- #
 ## experiment parameters
 nRep = info["# Repetitions"]
-nTrial = oracle.nTrials
-trialTime = 6  # seconds
-dr_fill = 3  # change rate: how much time is needed to fill the circle from min to max radius (seconds)
+nTrial = 2
+trialTime = 20  # seconds
+dr_fill = 5  # change rate: how much time is needed to fill the circle from min to max radius (seconds)
 
 ## time bar parameters
 barWidth = 0.8
@@ -159,7 +159,7 @@ for iTrial in range(nTrial):
     t0 = core.getTime()
     t_frame1 = t0
     while True:
-        x1, x2 = False, False
+        x1, x2 = False, False   
 
         # ----------------------------- Detect key press ----------------------------- #
         if keyboard.is_pressed("q"):
@@ -190,7 +190,7 @@ for iTrial in range(nTrial):
         r = circle.radius
 
         # get interaction result
-        y = oracle.interaction([x1, x2], iTrial)
+        y = oracle.interaction([x1, x2], t, iTrial)
 
         # change circle radius based on the interaction result
         if y:
@@ -239,7 +239,6 @@ for iTrial in range(nTrial):
             "x2": x2s,
             "y": ys,
             "t": ts,
-            "rule": oracle.trialType[iTrial],
             "acc": acc,
             "rt": rt,
         }
